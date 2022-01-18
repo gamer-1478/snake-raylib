@@ -13,10 +13,10 @@
 typedef enum Direction
 {
     none,
-    up,
-    right,
-    down,
-    left
+    w,
+    d,
+    s,
+    a
 } Direction;
 
 typedef struct Vec2Int
@@ -35,10 +35,9 @@ int score;
 
 bool game_grid[NO_BLCKS_ROW][NO_BLCKS_COL];
 
-Direction current_direction;
+Direction direc_rn;
 Vec2Int plyrPos;
 Vec2Int tictac_pos;
-
 TailPositions tail;
 
 void reset_game()
@@ -52,7 +51,7 @@ void reset_game()
         }
     }
 
-    current_direction = none;
+    direc_rn = none;
     score = 0;
     plyrPos = (Vec2Int){7, NO_BLCKS_COL / 2};
     tictac_pos = (Vec2Int){NO_BLCKS_ROW - 5, NO_BLCKS_COL / 2};
@@ -80,58 +79,58 @@ int main(void)
     while (!WindowShouldClose()) // Detect window close button or ESC key
     {
         // get input to change direction
-        switch (current_direction)
+        switch (direc_rn)
         {
         default:
             break;
         case none:
             if (IsKeyPressed(KEY_UP))
             {
-                current_direction = up;
+                direc_rn = w;
             }
             else if (IsKeyPressed(KEY_RIGHT))
             {
-                current_direction = right;
+                direc_rn = d;
             }
             else if (IsKeyPressed(KEY_DOWN))
             {
-                current_direction = down;
+                direc_rn = s;
             }
             break;
-        case up:
-        case down:
+        case w:
+        case s:
             if (IsKeyPressed(KEY_RIGHT))
             {
-                current_direction = right;
+                direc_rn = d;
             }
             else if (IsKeyPressed(KEY_LEFT))
             {
-                current_direction = left;
+                direc_rn = a;
             }
             break;
-        case right:
-        case left:
+        case d:
+        case a:
             if (IsKeyPressed(KEY_UP))
             {
-                current_direction = up;
+                direc_rn = w;
             }
             else if (IsKeyPressed(KEY_DOWN))
             {
-                current_direction = down;
+                direc_rn = s;
             }
             break;
         }
 
-        if (current_direction != none && GetTime() >= time + tick_time)
+        if (direc_rn != none && GetTime() >= time + tick_time)
         {
             time = GetTime();
 
             game_grid[tail.array[tail.size - 1].x][tail.array[tail.size - 1].y] = false;
 
             Vec2Int next_pos = plyrPos;
-            switch (current_direction)
+            switch (direc_rn)
             {
-            case up:
+            case w:
                 if (plyrPos.y == 0)
                 {
                     reset_game();
@@ -141,7 +140,7 @@ int main(void)
                     next_pos.y = plyrPos.y - 1;
                 }
                 break;
-            case right:
+            case d:
                 if (plyrPos.x == NO_BLCKS_ROW - 1)
                 {
                     reset_game();
@@ -151,7 +150,7 @@ int main(void)
                     next_pos.x = plyrPos.x + 1;
                 }
                 break;
-            case down:
+            case s:
                 if (plyrPos.y == NO_BLCKS_COL - 1)
                 {
                     reset_game();
@@ -161,7 +160,7 @@ int main(void)
                     next_pos.y = plyrPos.y + 1;
                 }
                 break;
-            case left:
+            case a:
                 if (plyrPos.x == 0)
                 {
                     reset_game();
@@ -227,7 +226,7 @@ int main(void)
                 }
             }
 
-            if (current_direction != none)
+            if (direc_rn != none)
             {
                 plyrPos = next_pos;
             }
