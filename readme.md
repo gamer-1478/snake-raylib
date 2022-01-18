@@ -4,3 +4,6 @@ build command
 
 ## Images
 ![alt text](https://github.com/gamer-1478/snake-raylib/blob/main/assets/1.png?raw=true)
+
+## Video
+![hmmm](https://youtu.be/j2NQ49UDuRM)
